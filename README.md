@@ -68,6 +68,8 @@ The dataset contains over 70 features, and it is unclear which are most relevant
 ### 5.1 Data Overview
 Initial exploration of the dataset reveals its structure, including feature types and distributions, setting the stage for targeted preprocessing.
 
+![Data Overview](numerical_histograms.png)
+
 ### 5.2 Numerical Features
 #### 5.2.1 Drop Useless Numerical Features
 Certain numerical features, such as `id`, columns with minimal variance (e.g., `calendar_updated`), and the target column (`days_booked`), provide little predictive value and are dropped from the training set.
@@ -113,11 +115,8 @@ Additionally, cross-validation results:
 
 The Random Forest model outperformed others on the training set (0.580813), though its test performance (0.254365) indicates some overfitting. Its cross-validation mean score (0.229249) suggests it generalizes better than linear models, making it the preferred choice.
 
-## 10. Permutation Importance for the Best Model
-Permutation importance is calculated for the best model to evaluate feature contributions.
-
-## 11. Insights and Recommendations
-### 11.1 Observations from Feature Importance
+## 10. Insights and Recommendations
+### 10.1 Observations from Feature Importance from the Best Model
 - **Most Important Features**:
   | Category          | Feature                            | Importance  |
   |-------------------|------------------------------------|-------------|
@@ -154,14 +153,14 @@ Permutation importance is calculated for the best model to evaluate feature cont
   | Host Responsiveness| Host Response Time                | -0.002024   |
   | Location          | Neighbourhood Cleansed            | -0.002765   |
 
-### 11.2 Key Insights
+### 10.2 Key Insights
 - **Reviews and Activity Rule**: Listings with high and recent review counts signal trust and demand, driving bookings.
 - **Availability is a Lever**: Short-term availability (30-90 days) is critical, reflecting LA’s spontaneous travel trends.
 - **Quality Supports, Doesn’t Lead**: Review scores (value, communication, check-in) matter but are secondary to engagement and availability.
 - **Price is Contextual**: It influences decisions but is secondary to perceived value.
 - **Host Profile and Logistics Fade**: Features like host profile details or instant booking have minimal impact.
 
-### 11.3 Actionable Recommendations
+### 10.3 Actionable Recommendations
 #### A) For Airbnb Owners in LA
 - **Maximize Review Volume and Recency**: Prompt guests for reviews post-stay and highlight recent feedback.
 - **Keep Short-Term Availability High**: Open calendars for 30-90 days, adjusting dynamically.
@@ -178,7 +177,7 @@ Permutation importance is calculated for the best model to evaluate feature cont
 - **Rethink Instant Booking Push**: Offer more control over instant booking options.
 - **Downplay Neighborhood Granularity**: Emphasize broader LA appeal in marketing.
 
-## 12. Improvements
+## 11. Improvements
 While the Random Forest model provided the best performance, there are several areas for improvement to enhance predictive accuracy and generalization:
 
 1. **More Hyperparameter Tuning for Random Forest**:
