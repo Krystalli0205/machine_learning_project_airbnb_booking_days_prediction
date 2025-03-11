@@ -69,11 +69,11 @@ The dataset contains over 70 features, and it is unclear which are most relevant
 Initial exploration of the dataset reveals its structure, including feature types and distributions, setting the stage for targeted preprocessing.
 
 ### 5.2 Numerical Features
-![Data Overview](numerical_histograms.png)
 #### 5.2.1 Drop Useless Numerical Features
 Certain numerical features, such as `id`, columns with minimal variance (e.g., `calendar_updated`), and the target column (`days_booked`), provide little predictive value and are dropped from the training set.
 
 #### 5.2.2 Plot Histograms for Numerical Features
+![Numerical Features Histograms](numerical_histograms.png)
 Histogram analysis highlights distribution patterns, identifying features requiring transformation:
 - Features like `beds`, `bedrooms`, and `bathrooms` have low cardinality and are treated as **discrete**.
 - Maximum and minimum nights features show clustering and outliers, warranting clamping to 30 and 365 days.
