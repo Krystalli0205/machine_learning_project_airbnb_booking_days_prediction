@@ -68,9 +68,8 @@ The dataset contains over 70 features, and it is unclear which are most relevant
 ### 5.1 Data Overview
 Initial exploration of the dataset reveals its structure, including feature types and distributions, setting the stage for targeted preprocessing.
 
-![Data Overview](numerical_histograms.png)
-
 ### 5.2 Numerical Features
+![Data Overview](numerical_histograms.png)
 #### 5.2.1 Drop Useless Numerical Features
 Certain numerical features, such as `id`, columns with minimal variance (e.g., `calendar_updated`), and the target column (`days_booked`), provide little predictive value and are dropped from the training set.
 
