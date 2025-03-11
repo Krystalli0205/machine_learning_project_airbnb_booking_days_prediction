@@ -64,7 +64,51 @@ The dataset contains over 70 features, and it is unclear which are most relevant
 - **Feature Importance**: Permutation importance to assess feature contributions.
 - **Self-Defining Functions**: Custom functions for comparing and visualizing results.
 
-## 5. Model Selection
+## 5. Data Preprocessing and Feature Engineering
+### 5.1 Data Overview
+Initial exploration of the dataset reveals its structure, including feature types and distributions, setting the stage for targeted preprocessing.
+
+### 5.2 Numerical Features
+#### 5.2.1 Drop Useless Numerical Features
+Certain numerical features, such as `id`, columns with minimal variance (e.g., `calendar_updated`), and the target column (`days_booked`), provide little predictive value and are dropped from the training set.
+
+#### 5.2.2 Plot Histograms for Numerical Features
+Histogram analysis highlights distribution patterns, identifying features requiring transformation:
+- Features like `beds`, `bedrooms`, and `bathrooms` have low cardinality and are treated as **discrete**.
+- Maximum and minimum nights features show clustering and outliers, warranting clamping to 30 and 365 days.
+- Features like `price`, `number_of_reviews`, and `calculated_host_listings_count` exhibit right-skewed distributions, benefiting from log transformation.
+
+### 5.3 Categorical Features
+- Hand-Picked useful and relevant categorical features include `property_type`, `room_type`, `neighbourhood_cleansed`, `instant_bookable`, `host_is_superhost`, `host_identity_verified`, `host_has_profile_pic`, `host_response_time`, and `host_verifications` due to their non-textual nature and manageable complexity (unlike amenities).
+- Tag informative missing values in `neighborhood_overview`, `last_review`, and `host_about` to indicate lower trustworthiness or popularity.
+
+### 6. First Round of Preprocessing and Transformations
+The identified transformations are assembled into a **ColumnTransformer** to create a consistent preprocessing pipeline. This pipeline is used to build a baseline model, followed by regularization techniques (Ridge and Elastic Net) to reduce overfitting and improve test set performance. Hyperparameter tuning with GridSearchCV optimizes model parameters.
+
+### 7. Define Functions for Comparing Results
+Custom functions store and compare R² and cross-validation scores across train and test sets to evaluate model performance.
+
+### 8. Baseline Model
+A baseline model is established using the initial preprocessing pipeline to provide a reference point for subsequent improvements. But the gap between train and test R² scores is too large, indicating overfitting.
+
+### 9. Ridge Regression with Hyperparameter Tuning
+Ridge regression is applied with hyperparameter tuning to balance model complexity and performance, reducing overfitting.
+
+### 10. Elastic Net with Hyperparameter Tuning
+Elastic Net, combining L1 and L2 regularization, is tuned to further refine the model and select relevant features.
+
+### 11. Check Permutation Importance
+Permutation importance is calculated to evaluate the contribution of each feature to the model's predictions.
+
+### 12. Second Round of Feature Engineering
+- **Discretize Nights and Availability 30**: To introduce nonlinearity, additional discretization is applied to features like minimum_nights, availability_30, and others, based on their importance scores.
+- **Add Interaction Terms for Latitude and Longitude**: Residual analysis of latitude and longitude suggests potential nonlinear relationships, prompting the creation of interaction terms.
+- **Add Interaction Terms for Price and Bedrooms**: Similar analysis for price and bedrooms indicates nonlinear interactions, leading to additional feature engineering.
+
+### 13. Non-Linear Model: Random Forest with Hyperparameter Tuning
+A Random Forest model is explored for its ability to handle nonlinear relationships, sensitivity to outliers, and built-in feature importance. Hyperparameter tuning is conducted to optimize performance.
+
+## 14. Model Selection
 The project evaluated multiple models, with performance metrics (R² scores) provided below for train and test sets:
 
 | Model         | Linear Regression | Ridge  | Elastic Net | Elastic Net 2 | Random Forest |
@@ -79,8 +123,11 @@ Additionally, cross-validation results:
 
 The Random Forest model outperformed others on the training set (0.580813), though its test performance (0.254365) indicates some overfitting. Its cross-validation mean score (0.229249) suggests it generalizes better than linear models, making it the preferred choice.
 
-## 6. Insights and Recommendations
-### 17.1 Observations from Feature Importance
+## 15. Permutation Importance for the Best Model
+Permutation importance is calculated for the best model to evaluate feature contributions.
+
+## 16. Insights and Recommendations
+### 16.1 Observations from Feature Importance
 - **Most Important Features**:
   | Category          | Feature                            | Importance  |
   |-------------------|------------------------------------|-------------|
@@ -117,14 +164,14 @@ The Random Forest model outperformed others on the training set (0.580813), thou
   | Host Responsiveness| Host Response Time                | -0.002024   |
   | Location          | Neighbourhood Cleansed            | -0.002765   |
 
-### 17.2 Key Insights
+### 16.2 Key Insights
 - **Reviews and Activity Rule**: Listings with high and recent review counts signal trust and demand, driving bookings.
 - **Availability is a Lever**: Short-term availability (30-90 days) is critical, reflecting LA’s spontaneous travel trends.
 - **Quality Supports, Doesn’t Lead**: Review scores (value, communication, check-in) matter but are secondary to engagement and availability.
 - **Price is Contextual**: It influences decisions but is secondary to perceived value.
 - **Host Profile and Logistics Fade**: Features like host profile details or instant booking have minimal impact.
 
-### 17.3 Actionable Recommendations
+### 16.3 Actionable Recommendations
 #### A) For Airbnb Owners in LA
 - **Maximize Review Volume and Recency**: Prompt guests for reviews post-stay and highlight recent feedback.
 - **Keep Short-Term Availability High**: Open calendars for 30-90 days, adjusting dynamically.
@@ -141,7 +188,7 @@ The Random Forest model outperformed others on the training set (0.580813), thou
 - **Rethink Instant Booking Push**: Offer more control over instant booking options.
 - **Downplay Neighborhood Granularity**: Emphasize broader LA appeal in marketing.
 
-## 18. Improvements
+## 17. Improvements
 While the Random Forest model provided the best performance, there are several areas for improvement to enhance predictive accuracy and generalization:
 
 1. **More Hyperparameter Tuning for Random Forest**:
